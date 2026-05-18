@@ -21,11 +21,11 @@ The goal is to:
 
 ```mermaid
 flowchart TB
-    Clients[OpenHands / Zed / MCP Clients]
-    Caddy[Caddy\nlocalhost:8765]
-    Services[MCP service processes]
-    Direct[Direct services\n(type == supergatewayProxy or both omitted)]
-    Gateway[Supergateway-wrapped servers\n(type != supergatewayProxy)]
+    Clients["OpenHands / Zed / MCP Clients"]
+    Caddy["Caddy<br/>localhost:8765"]
+    Services["MCP service processes"]
+    Direct["Direct services<br/>(type equals supergatewayProxy, or both omitted)"]
+    Gateway["Supergateway-wrapped servers<br/>(type differs from supergatewayProxy)"]
 
     Clients --> Caddy
     Caddy --> Services
