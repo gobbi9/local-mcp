@@ -1,0 +1,33 @@
+[env]
+MCP_LOG_LEVEL = "debug"
+SUPERGATEWAY_CMD = "npx -y supergateway"
+TIME_MCP_CMD = "uvx mcp-server-time --local-timezone=Europe/Berlin"
+FETCH_MCP_CMD = "uvx mcp-server-fetch"
+INSPECTOR_CMD = "npx @modelcontextprotocol/inspector"
+
+[tools]
+caddy = "latest"
+node = "lts"
+uv = "latest"
+
+[mcp.time]
+description = "MCP server for time and timezone"
+type = "stdio"
+supergatewayProxy = "streamableHttp"
+run = "{{env.TIME_MCP_CMD}}"
+port = 10001
+path = "/time"
+
+[mcp.fetch]
+description = "MCP server for fetching webpages"
+type = "stdio"
+supergatewayProxy = "streamableHttp"
+run = "{{env.FETCH_MCP_CMD}}"
+port = 10002
+path = "/fetch"
+
+[mcp.inspector]
+description = "MCP server inspector Web UI"
+run = "{{env.INSPECTOR_CMD}}"
+port = 6274
+path = "/inspector"
