@@ -214,10 +214,13 @@ use ~/.config/mcp/mcp-install.nu
 This function automates:
 
 - generating infrastructure files
+- removing stale managed LaunchAgents (`dev.*.plist`) that are no longer generated
 - copying plist files
 - reloading launchd services
 
 The function acts similarly to a lightweight local infrastructure deployment command.
+
+Stale-cleanup safety rule: only `dev.*.plist` entries are treated as managed by this repository, so unrelated LaunchAgents are not deleted.
 
 Typical usage:
 

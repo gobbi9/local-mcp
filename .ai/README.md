@@ -5,7 +5,7 @@ This file documents prompts, skills, memory artifacts, and state files under `.a
 ## Prompts
 
 - `start-session.md`: session bootstrap prompt that loads persistent memory artifacts.
-- `end-session.md`: session close-out prompt that persists new learnings into memory artifacts.
+- `end-session.md`: session close-out prompt that persists new learnings into memory artifacts, refreshes `.ai/README.md`, and conditionally updates root `README.md` via `docs` skill.
 - `seed-memory.md`: historical seeding prompt that ingests Zed threads and reconstructs long-term memory files.
 
 ## Skills

@@ -15,10 +15,38 @@ export def main [] {
 
     print "Copying launchd plists and reloading services..."
 
+    let managed_plist_prefix = "dev."
+
     let generated_plists = (
         ls $"($generated)/launchd"
         | where type == file
     )
+
+    let generated_plist_names = (
+        $generated_plists
+        | get name
+        | each { |name| $name | path basename }
+    )
+
+    let stale_managed_plists = (
+        ls $launchagents
+        | where type == file
+        | where { |it|
+            let basename = ($it.name | path basename)
+            let is_managed = (($basename | str starts-with $managed_plist_prefix) and ($basename | str ends-with ".plist"))
+            let is_current = ($generated_plist_names | any { |generated_name| $generated_name == $basename })
+
+            $is_managed and (not $is_current)
+        }
+    )
+
+    $stale_managed_plists | each { |it|
+        do {
+            launchctl unload $it.name
+        } | complete | ignore
+
+        rm -f $it.name
+    }
 
     $generated_plists
     | each { |it|

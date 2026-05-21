@@ -29,6 +29,7 @@
 
 - Edit `mcp.toml` and Nu scripts; avoid manual edits to generated files under `generated/`.
 - `openn` is the Nushell alias for Nushell `open`, used to avoid conflict with macOS `open` behavior.
+- LaunchAgent management in `mcp-install.nu` is prefix-scoped: only `dev.*.plist` files are considered managed/stale cleanup candidates.
 - End-session `.ai` workflow: `memento -> ai-janitor -> docs`.
 - Zed-thread ingestion is sequential and cursor-driven via `.ai/skills/zed-threads/state/nu.cursor`.
 

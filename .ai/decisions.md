@@ -78,3 +78,14 @@ Reason:
 
 Consequences:
 - Replayed adaptation prompt is treated as no-op unless drift is detected.
+
+### 2026-05-21
+
+Decision:
+- In `mcp-install.nu`, remove stale LaunchAgents only for managed plist names with the `dev.` prefix.
+
+Reason:
+- Avoid deleting unrelated user/system LaunchAgents while still pruning obsolete generated services.
+
+Consequences:
+- Install runs now clean up stale `dev.*.plist` entries in `~/Library/LaunchAgents` and leave non-managed plists untouched.
