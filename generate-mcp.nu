@@ -192,9 +192,7 @@ export def main [] {
         }
     }
 
-    # Generate launchd plist for Caddy
-    let caddy_bin = (which caddy | get path | first)
-
+    # Generate launchd plist for Caddy (run through mise so caddy binary lookup is deterministic)
     let caddy_plist = $"
 <?xml version=\"1.0\" encoding=\"UTF-8\"?>
 <!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\"
@@ -208,7 +206,11 @@ export def main [] {
 
   <key>ProgramArguments</key>
   <array>
-    <string>($caddy_bin)</string>
+    <string>/opt/homebrew/bin/mise</string>
+    <string>x</string>
+    <string>caddy@latest</string>
+    <string>--</string>
+    <string>caddy</string>
     <string>run</string>
     <string>--config</string>
     <string>($generated)/Caddyfile</string>

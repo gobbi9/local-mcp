@@ -89,3 +89,43 @@ Reason:
 
 Consequences:
 - Install runs now clean up stale `dev.*.plist` entries in `~/Library/LaunchAgents` and leave non-managed plists untouched.
+
+### 2026-05-23
+
+Decision:
+- Add a local GitHub MCP service using the upstream release binary via `mise` GitHub backend (`"github:github/github-mcp-server" = "latest"`), proxied as `stdio -> streamableHttp`.
+- Source `GITHUB_PERSONAL_ACCESS_TOKEN` from 1Password at runtime using `op run` and secret reference `op://Personal/gh-cli/password`.
+
+Reason:
+- Avoid Docker dependency for this MCP service.
+- Keep version resolution generic (`latest`) and platform-aware (Darwin arm64 asset selected by `mise`).
+- Keep PAT out of config files and require successful 1Password resolution at service startup.
+
+Consequences:
+- `mcp.github` is available at `/github` on port `10003`.
+- Startup behavior now depends on 1Password CLI/app availability in the user session.
+- Token retrieval occurs at process start (not guaranteed per individual MCP tool call).
+
+### 2026-05-23
+
+Decision:
+- Use 1Password secret reference `op://Personal/gh-cli/token` (not `.../password`) for GitHub PAT injection.
+
+Reason:
+- The `gh-cli` item field label is `token`; using `password` causes child process startup failures.
+
+Consequences:
+- GitHub MCP startup now succeeds after biometric auth and token resolution.
+- PAT remains externalized to 1Password with no hardcoded secret in config.
+
+### 2026-05-23
+
+Decision:
+- Generate `dev.caddy` LaunchAgent to run Caddy through `mise` (`/opt/homebrew/bin/mise x caddy@latest -- caddy run ...`) instead of relying on a resolved direct `caddy` path from Nu lookup.
+
+Reason:
+- Nu path lookup produced an empty caddy program path in generated plist in this environment, causing launchd exit code 78.
+
+Consequences:
+- Caddy startup is deterministic in launchd-managed runs.
+- `localhost:8765` proxy availability no longer depends on shell PATH resolution quirks.

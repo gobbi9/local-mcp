@@ -23,7 +23,11 @@
   - `generated/Caddyfile`
   - `generated/launchd/*.plist`
 - Caddy reverse-proxies all local endpoints on `localhost:8765`.
+- `dev.caddy` launchd generation runs Caddy via `mise x caddy@latest -- caddy run ...` for deterministic startup in launchd context.
 - Inspector has special root-asset routing (`/assets*`, `/mcp.svg`) when mounted on `/inspector`.
+- GitHub MCP is configured as `stdio -> streamableHttp` via Supergateway and exposed at `/github` on port `10003`.
+- GitHub MCP binary provisioning is handled by `mise` using the GitHub backend (`"github:github/github-mcp-server" = "latest"`), so release asset selection (including Darwin arm64) is automatic.
+- GitHub PAT is sourced from 1Password at process start via `op run` + secret reference (`op://Personal/gh-cli/token`), avoiding hardcoded tokens in config.
 
 ## Conventions
 
@@ -44,6 +48,14 @@
 - Processed `mcp` thread records sequentially (7 records from baseline cursor window).
 - Main themes: MCP generation workflow, Supergateway/Inspector behavior, Mermaid README rendering constraints, and `.ai` workspace adaptation.
 - Repeated copies of the same adaptation prompt were observed in history and treated as one logical event.
+
+## Security Notes
+
+- 2026-05-23: A GitHub PAT was exposed in terminal output during troubleshooting. Token was revoked/rotated immediately.
+- 2026-05-23: PAT was regenerated via GitHub Web UI and updated in 1Password item `Personal/gh-cli` field `token`.
+- Observed behavior: using MCP Inspector triggers 1Password biometric auth on each GitHub MCP tool request (desired), consistent with stateless stdio→streamableHttp proxy behavior.
+- Never run commands that print secret values (or raw secret-bearing environment variables) to stdout/stderr.
+- When inspecting 1Password items, list only metadata (field labels/types), never field values.
 
 ## Loop Guard
 

@@ -57,8 +57,10 @@ Example concepts contained in this file:
 
 - `TIME_MCP_CMD`
 - `FETCH_MCP_CMD`
+- `GITHUB_MCP_CMD`
 - `[mcp.time]`
 - `[mcp.fetch]`
+- `[mcp.github]`
 - `type = "stdio" | "sse" | "streamableHttp"` (optional)
 - `supergatewayProxy = "stdio" | "sse" | "streamableHttp"` (optional)
 
@@ -139,6 +141,7 @@ Example structure:
 ```text
 localhost:8765/time/mcp
 localhost:8765/fetch/mcp
+localhost:8765/github/mcp
 localhost:8765/inspector
 ```
 
@@ -161,7 +164,7 @@ HTTPS is intentionally disabled to keep local development simple.
 
 Each HTTP/SSE-exposed MCP service is managed through `launchd`.
 
-Caddy also has a dedicated generated launchd entry (`dev.caddy`) that runs the generated `Caddyfile` directly via the resolved `caddy` binary path (`which caddy | get path`).
+Caddy also has a dedicated generated launchd entry (`dev.caddy`) that runs the generated `Caddyfile` via `mise` (`mise x caddy@latest -- caddy run ...`) for deterministic launchd startup.
 
 This provides:
 
@@ -235,6 +238,7 @@ mcp-install
 The setup also supports:
 
 - MCP Inspector
+- GitHub MCP Server (local binary, proxied via `/github/mcp`)
 
 The inspector can omit both `type` and `supergatewayProxy`, and still run directly without Supergateway wrapping.
 

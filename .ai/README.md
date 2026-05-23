@@ -18,7 +18,7 @@ This file documents prompts, skills, memory artifacts, and state files under `.a
 
 ## Other Markdown Files
 
-- `memory.md`: durable project overview, architecture, constraints, and conventions.
+- `memory.md`: durable project overview, architecture, constraints, conventions, and security notes.
 - `active_context.md`: current focus, immediate issues, and next actions.
 - `decisions.md`: chronological log of key technical/product decisions.
 - `failures.md`: chronological log of failed approaches and lessons learned.

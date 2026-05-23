@@ -2,22 +2,25 @@
 
 ## Current Task
 
-- Updated `mcp-install.nu` to safely remove stale managed LaunchAgents by prefix instead of deleting non-generated plists.
-- Managed cleanup now targets only `dev.*.plist` entries in `~/Library/LaunchAgents` that are no longer present in `generated/launchd`.
+- Added and debugged a new GitHub MCP service (`[mcp.github]`) in `mcp.toml`.
+- Service now runs `github-mcp-server` as local binary via `mise` and is exposed through Supergateway (`stdio -> streamableHttp`) at `/github` on port `10003`.
+- PAT loading is wired to 1Password via `op run` with secret reference `op://Personal/gh-cli/token`.
 
 ## Open Issues
 
-- No blocking issues identified.
-- Prefix-based ownership currently assumes generated launchd files continue using the `dev.` naming convention.
+- No blocking runtime issues are currently open for GitHub MCP after fixes.
+- Security follow-up completed: previously exposed PAT was revoked and replaced.
 
 ## Next Steps
 
-1. Run `mcp-install` during normal workflow to verify stale `dev.*.plist` cleanup on real local state.
-2. Keep `generate-mcp.nu` and `mcp-install.nu` naming conventions aligned if service labels/prefixes evolve.
-3. Continue end-session maintenance flow: `memento -> ai-janitor -> docs`.
+1. Keep using `mcp-install` after `mcp.toml`/generator changes.
+2. If needed later, add a lightweight health endpoint for easier browser/curl liveness checks.
+3. Optionally evaluate `stateful` Supergateway mode if session semantics are preferred over per-request auth prompts.
 
 ## Recently Changed
 
-- Added stale managed plist detection in `mcp-install.nu` using prefix + generated-name set comparison.
-- Added unload + remove step for stale managed plists before copying/reloading generated plists.
-- Validated Nushell script import with `nu -c 'use mcp-install.nu'`.
+- Added `GITHUB_MCP_CMD`, `"github:github/github-mcp-server" = "latest"`, and `[mcp.github]` in `mcp.toml`.
+- Corrected 1Password field reference from `password` to `token`.
+- Verified observed behavior: Inspector-triggered GitHub MCP requests prompt 1Password biometric auth per request in current stateless mode.
+- Fixed Caddy LaunchAgent generation in `generate-mcp.nu` to run Caddy via `mise x caddy@latest -- caddy run ...`, avoiding launchd path resolution failures.
+- Regenerated and reloaded services with `mcp-install`; confirmed `http://localhost:8765/github/mcp` responds to MCP initialize requests.
