@@ -18,10 +18,10 @@ This file documents prompts, skills, memory artifacts, and state files under `.a
 
 ## Other Markdown Files
 
-- `memory.md`: durable project overview, architecture, constraints, conventions, and security notes.
+- `memory.md`: durable project overview, architecture, constraints, conventions, and security notes (including discovery/serving model).
 - `active_context.md`: current focus, immediate issues, and next actions.
-- `decisions.md`: chronological log of key technical/product decisions.
-- `failures.md`: chronological log of failed approaches and lessons learned.
+- `decisions.md`: chronological log of key technical/product decisions (including discovery endpoint and generation workflow choices).
+- `failures.md`: chronological log of failed approaches and lessons learned (including stale Nu session pitfalls).
 - `README.md`: canonical `.ai` workspace index and dependency map.
 
 ## State and Support Files

@@ -13,16 +13,18 @@
 - `mcp.toml` defines:
   - shared env vars and tool versions,
   - per-service command, port, path,
-  - optional `type` and `supergatewayProxy` transport fields.
+  - optional `type` and `supergatewayProxy` transport fields,
+  - discovery metadata (`[discovery]`, `[discovery.protocol]`, `[discovery.clientHints]`) used to generate root agent bootstrap JSON.
 - Transport resolution in generation logic:
   - `type != supergatewayProxy` -> wrap service with Supergateway.
   - `type == supergatewayProxy` -> run service directly.
   - both omitted + `port`/`path` present -> infer direct `streamableHttp`.
 - Generated artifacts include:
   - `~/.config/mise/config.mcp.toml`
+  - `generated/discovery.json`
   - `generated/Caddyfile`
   - `generated/launchd/*.plist`
-- Caddy reverse-proxies all local endpoints on `localhost:8765`.
+- Caddy reverse-proxies all local endpoints on `localhost:8765` and serves generated discovery JSON at root (`GET /` -> `generated/discovery.json`).
 - `dev.caddy` launchd generation runs Caddy via `mise x caddy@latest -- caddy run ...` for deterministic startup in launchd context.
 - Inspector has special root-asset routing (`/assets*`, `/mcp.svg`) when mounted on `/inspector`.
 - GitHub MCP is configured as `stdio -> streamableHttp` via Supergateway and exposed at `/github` on port `10003`.
@@ -33,6 +35,7 @@
 
 - Edit `mcp.toml` and Nu scripts; avoid manual edits to generated files under `generated/`.
 - `openn` is the Nushell alias for Nushell `open`, used to avoid conflict with macOS `open` behavior.
+- For reliable generation/install, prefer running Nu scripts from fresh processes (avoids stale in-memory definitions in long-lived shells).
 - LaunchAgent management in `mcp-install.nu` is prefix-scoped: only `dev.*.plist` files are considered managed/stale cleanup candidates.
 - End-session `.ai` workflow: `memento -> ai-janitor -> docs`.
 - Zed-thread ingestion is sequential and cursor-driven via `.ai/skills/zed-threads/state/nu.cursor`.

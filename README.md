@@ -139,11 +139,15 @@ Caddy exposes all MCP HTTP endpoints behind a single local port.
 Example structure:
 
 ```text
+localhost:8765
 localhost:8765/time/mcp
 localhost:8765/fetch/mcp
 localhost:8765/github/mcp
 localhost:8765/inspector
 ```
+
+`GET http://localhost:8765` serves a generated JSON discovery document derived from `mcp.toml` metadata (`[discovery]`, `[discovery.protocol]`, `[discovery.clientHints]`, and service `description`).
+This gives agents a single bootstrap endpoint to discover local MCP routes and request-order guidance.
 
 When a service is wrapped by Supergateway, endpoint suffixes follow Supergateway defaults:
 

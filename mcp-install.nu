@@ -1,5 +1,3 @@
-use generate-mcp.nu
-
 # Initialize MCP services
 export def main [] {
     let home = $env.HOME
@@ -11,7 +9,8 @@ export def main [] {
     mkdir $launchagents
 
     print "Generating MCP infrastructure..."
-    generate-mcp
+    let generate_script = $"($root)/generate-mcp.nu"
+    ^nu -c $"source ($generate_script); main"
 
     print "Copying launchd plists and reloading services..."
 
@@ -68,7 +67,7 @@ export def main [] {
         launchctl load $it.name
     }
 
-    let cfg = openn $"($root)/mcp.toml"
+    let cfg = (try { openn $"($root)/mcp.toml" } catch { open $"($root)/mcp.toml" })
     let mcp_cfg = ($cfg | get -o mcp | default {})
     let mcp_entries = ($mcp_cfg | transpose name value)
 

@@ -129,3 +129,39 @@ Reason:
 Consequences:
 - Caddy startup is deterministic in launchd-managed runs.
 - `localhost:8765` proxy availability no longer depends on shell PATH resolution quirks.
+
+### 2026-05-23
+
+Decision:
+- Expose a generated discovery document at gateway root (`GET http://localhost:8765`) and generate it from `mcp.toml` metadata.
+
+Reason:
+- Give agents a single bootstrap endpoint to discover MCP routes and protocol expectations.
+
+Consequences:
+- `generate-mcp.nu` now writes `generated/discovery.json` and generates a Caddy root handler that rewrites `/` to that file.
+- Root discovery behavior is regenerated on every `mcp-install` run.
+
+### 2026-05-23
+
+Decision:
+- Use `[discovery]` in `mcp.toml` as source of truth for discovery protocol/client-hint metadata and keep service entries minimal.
+
+Reason:
+- Avoid duplicated/overly noisy fields while preserving practical guidance for agent request order.
+
+Consequences:
+- Discovery JSON includes protocol + client hints from config.
+- Service-level hint clutter (`intentKeywords`, `examples`, `preferredForIntents`, `defaultTool`, `knownTools`) was removed.
+
+### 2026-05-23
+
+Decision:
+- In `mcp-install.nu`, run `generate-mcp.nu` from disk in a fresh Nu process (`nu -c ...`) instead of relying on imported in-session function state.
+
+Reason:
+- Prevent stale Nushell definitions from regenerating outdated Caddy/discovery outputs.
+
+Consequences:
+- Install runs are deterministic across long-lived shell sessions.
+- Troubleshooting guidance now favors explicit fresh-process invocation when drift is suspected.

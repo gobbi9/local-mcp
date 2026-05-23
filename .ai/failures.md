@@ -44,6 +44,18 @@ Why it failed:
 What was learned:
 - Never print secret values during diagnostics; inspect only field metadata and rotate compromised credentials immediately.
 
+### 2026-05-23
+
+Attempted:
+- Run generator/install from long-lived Nushell session functions after script edits.
+
+Why it failed:
+- Session-held stale function definitions could regenerate outdated outputs (for example Caddyfile missing root discovery handler), making behavior appear inconsistent with file contents.
+
+What was learned:
+- Execute generation/install via fresh-process script sourcing (`nu -c 'source ...; main'`) or restart shell before rerunning.
+- Prefer `mcp-install.nu` behavior that invokes `generate-mcp.nu` from disk each run.
+
 ## Baseline Status
 
 - Historical baseline retained; new entries above capture current session failures and lessons.
