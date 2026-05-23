@@ -81,9 +81,9 @@ It also applies the transport decision logic above, including the "both omitted"
 
 Generated artifacts include:
 
-- `config.mcp.toml` for `mise`
-- `Caddyfile`
-- `launchd` plist files
+- `~/.config/mise/config.mcp.toml` for `mise`
+- `./generated/Caddyfile`
+- `./generated/launchd` plist files
 - OpenHands MCP configuration (optional future extension)
 
 The script removes duplication between:
