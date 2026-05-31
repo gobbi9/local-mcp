@@ -2,7 +2,7 @@
 export def main [] {
     let home = $env.HOME
 
-    let root = $"($home)/.config/mcp"
+    let root = $"($home)/projects/mcp"
     let generated = $"($root)/generated"
     let launchagents = $"($home)/Library/LaunchAgents"
 

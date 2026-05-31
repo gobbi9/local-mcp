@@ -101,7 +101,7 @@ The script removes duplication between:
 Generated files are written under:
 
 ```text
-~/.config/mcp/generated/
+~/projects/mcp/generated/
 ```
 
 Typical contents:
@@ -199,7 +199,7 @@ This aligns with Supergateway behavior (stdio→HTTP logs on stdout, HTTP→stdi
 The helper function is defined in:
 
 ```text
-~/.config/mcp/mcp-install.nu
+~/projects/mcp/mcp-install.nu
 ```
 
 Add the following to:
@@ -214,8 +214,8 @@ alias openn = open
 alias open = ^open
 
 # import mcp-install function
-use ~/.config/mcp/generate-mcp.nu
-use ~/.config/mcp/mcp-install.nu
+use ~/projects/mcp/generate-mcp.nu
+use ~/projects/mcp/mcp-install.nu
 ```
 
 This function automates:

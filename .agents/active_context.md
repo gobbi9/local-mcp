@@ -14,14 +14,14 @@
 ## Next Steps
 
 1. Continue running generation/install via fresh Nu process when debugging drift:
-   - `nu -c 'source ~/.config/mcp/generate-mcp.nu; main'`
-   - `nu -c 'source ~/.config/mcp/mcp-install.nu; main'`
+   - `nu -c 'source ~/projects/mcp/generate-mcp.nu; main'`
+   - `nu -c 'source ~/projects/mcp/mcp-install.nu; main'`
 2. Keep discovery structure minimal and driven by `[discovery]` in `mcp.toml`.
 3. If agent behavior still over-requests, tune only `discovery.clientHints` (not service-level hint clutter).
 
 ## Recently Changed
 
-- Added generated discovery manifest output: `~/.config/mcp/generated/discovery.json`.
+- Added generated discovery manifest output: `~/projects/mcp/generated/discovery.json`.
 - Added Caddy root route generation so `GET http://localhost:8765` serves `discovery.json`.
 - Added `[discovery]`, `[discovery.protocol]`, and `[discovery.clientHints]` metadata in `mcp.toml` and wired generator to emit it.
 - Removed service-level discovery clutter (`intentKeywords`, `examples`, `preferredForIntents`, `defaultTool`, `knownTools`) from both `mcp.toml` and generated output.
