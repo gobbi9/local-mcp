@@ -18,7 +18,7 @@ This file documents skills, memory artifacts, and state files under `.agents`.
 - `memory.md`: durable project overview, architecture, constraints, conventions, and security notes (including discovery/serving model).
 - `active_context.md`: current focus, immediate issues, and next actions.
 - `decisions.md`: chronological log of key technical/product decisions (including discovery endpoint and generation workflow choices).
-- `failures.md`: chronological log of failed approaches and lessons learned (including stale Nu session pitfalls).
+- `failures.md`: chronological log of failed approaches and lessons learned (including stale Nu session pitfalls and stale generated launchd artifact pitfalls).
 - `README.md`: canonical `.agents` workspace index and dependency map.
 
 ## State and Support Files

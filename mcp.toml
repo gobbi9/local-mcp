@@ -4,7 +4,8 @@ SUPERGATEWAY_CMD = "npx -y supergateway"
 TIME_MCP_CMD = "uvx mcp-server-time --local-timezone=Europe/Berlin"
 FETCH_MCP_CMD = "uvx mcp-server-fetch"
 INSPECTOR_CMD = "npx @modelcontextprotocol/inspector"
-GITHUB_MCP_CMD = "sh -lc 'GITHUB_PERSONAL_ACCESS_TOKEN=op://Personal/gh-cli/token exec op run -- github-mcp-server stdio'"
+GITHUB_PERSONAL_MCP_CMD = "sh -lc 'GITHUB_PERSONAL_ACCESS_TOKEN=op://Personal/gh-cli/token exec op run -- github-mcp-server stdio'"
+GITHUB_OPENSOCKETS_MCP_CMD = "sh -lc 'GITHUB_PERSONAL_ACCESS_TOKEN=op://Opensockets/gh-cli/token exec op run -- github-mcp-server stdio'"
 
 [tools]
 caddy = "latest"
@@ -59,10 +60,18 @@ run = "{{env.INSPECTOR_CMD}}"
 port = 6274
 path = "/inspector"
 
-[mcp.github]
-description = "Use for GitHub repository operations via MCP tools (issues, PRs, code, metadata)."
+[mcp.github-personal]
+description = "Use for GitHub repository operations via MCP tools (issues, PRs, code, metadata) with personal account token."
 type = "stdio"
 supergatewayProxy = "streamableHttp"
-run = "{{env.GITHUB_MCP_CMD}}"
+run = "{{env.GITHUB_PERSONAL_MCP_CMD}}"
 port = 10003
-path = "/github"
+path = "/github-personal"
+
+[mcp.github-opensockets]
+description = "Use for GitHub repository operations via MCP tools (issues, PRs, code, metadata) with opensockets org token."
+type = "stdio"
+supergatewayProxy = "streamableHttp"
+run = "{{env.GITHUB_OPENSOCKETS_MCP_CMD}}"
+port = 10004
+path = "/github-opensockets"

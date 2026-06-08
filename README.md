@@ -57,10 +57,12 @@ Example concepts contained in this file:
 
 - `TIME_MCP_CMD`
 - `FETCH_MCP_CMD`
-- `GITHUB_MCP_CMD`
+- `GITHUB_PERSONAL_MCP_CMD`
+- `GITHUB_OPENSOCKETS_MCP_CMD`
 - `[mcp.time]`
 - `[mcp.fetch]`
-- `[mcp.github]`
+- `[mcp.github-personal]`
+- `[mcp.github-opensockets]`
 - `type = "stdio" | "sse" | "streamableHttp"` (optional)
 - `supergatewayProxy = "stdio" | "sse" | "streamableHttp"` (optional)
 
@@ -87,6 +89,8 @@ Generated artifacts include:
 - `./generated/Caddyfile`
 - `./generated/launchd` plist files
 - OpenHands MCP configuration (optional future extension)
+
+Before writing launchd artifacts, the script clears stale managed `dev.*.plist` files from `./generated/launchd` so removed/renamed services do not persist.
 
 The script removes duplication between:
 - runtime commands
@@ -142,7 +146,8 @@ Example structure:
 localhost:8765
 localhost:8765/time/mcp
 localhost:8765/fetch/mcp
-localhost:8765/github/mcp
+localhost:8765/github-personal/mcp
+localhost:8765/github-opensockets/mcp
 localhost:8765/inspector
 ```
 
@@ -242,7 +247,9 @@ mcp-install
 The setup also supports:
 
 - MCP Inspector
-- GitHub MCP Server (local binary, proxied via `/github/mcp`)
+- GitHub MCP Server (local binary) with two endpoints:
+  - `/github-personal/mcp`
+  - `/github-opensockets/mcp`
 
 The inspector can omit both `type` and `supergatewayProxy`, and still run directly without Supergateway wrapping.
 

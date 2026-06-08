@@ -56,6 +56,18 @@ What was learned:
 - Execute generation/install via fresh-process script sourcing (`nu -c 'source ...; main'`) or restart shell before rerunning.
 - Prefer `mcp-install.nu` behavior that invokes `generate-mcp.nu` from disk each run.
 
+### 2026-06-08
+
+Attempted:
+- Rely on `mcp-install.nu` stale LaunchAgent cleanup alone after renaming `mcp.github` to `mcp.github-personal` and adding `mcp.github-opensockets`.
+
+Why it failed:
+- `generate-mcp.nu` did not remove obsolete files from `generated/launchd`, so legacy `dev.mcp.github.plist` remained in the generated set and was treated as current by installer cleanup logic.
+
+What was learned:
+- Stale cleanup must happen at both layers: generated artifacts and installed LaunchAgents.
+- Installer-side stale detection only works if `generated/launchd` itself is clean.
+
 ## Baseline Status
 
 - Historical baseline retained; new entries above capture current session failures and lessons.

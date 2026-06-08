@@ -15,6 +15,7 @@
   - per-service command, port, path,
   - optional `type` and `supergatewayProxy` transport fields,
   - discovery metadata (`[discovery]`, `[discovery.protocol]`, `[discovery.clientHints]`) used to generate root agent bootstrap JSON.
+- `generate-mcp.nu` now clears stale managed `dev.*.plist` files from `generated/launchd` before writing fresh launchd artifacts, so removed services do not persist across installs.
 - Transport resolution in generation logic:
   - `type != supergatewayProxy` -> wrap service with Supergateway.
   - `type == supergatewayProxy` -> run service directly.
@@ -27,7 +28,9 @@
 - Caddy reverse-proxies all local endpoints on `localhost:8765` and serves generated discovery JSON at root (`GET /` -> `generated/discovery.json`).
 - `dev.caddy` launchd generation runs Caddy via `mise x caddy@latest -- caddy run ...` for deterministic startup in launchd context.
 - Inspector has special root-asset routing (`/assets*`, `/mcp.svg`) when mounted on `/inspector`.
-- GitHub MCP is configured as `stdio -> streamableHttp` via Supergateway and exposed at `/github` on port `10003`.
+- GitHub MCP is configured as two `stdio -> streamableHttp` services via Supergateway:
+  - `github-personal` at `/github-personal` on port `10003`
+  - `github-opensockets` at `/github-opensockets` on port `10004`.
 - GitHub MCP binary provisioning is handled by `mise` using the GitHub backend (`"github:github/github-mcp-server" = "latest"`), so release asset selection (including Darwin arm64) is automatic.
 - GitHub PAT is sourced from 1Password at process start via `op run` + secret reference (`op://Personal/gh-cli/token`), avoiding hardcoded tokens in config.
 

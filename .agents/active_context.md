@@ -2,28 +2,22 @@
 
 ## Current Task
 
-- Improve MCP endpoint discoverability for agents at `http://localhost:8765` while keeping config-driven generation.
-- Ensure discovery metadata is generated from `mcp.toml` and served reliably via Caddy root (`GET /`).
-- Reduce noisy/unused discovery fields and keep only practical protocol + client-hint guidance.
+- Session closed after splitting GitHub MCP into personal and opensockets services and fixing stale generated launchd artifact cleanup.
 
 ## Open Issues
 
-- No current blocking issues after the latest regeneration/install verification.
-- Operational caveat: stale Nushell session-loaded functions can still confuse manual runs if users invoke old in-memory definitions.
+- No current blocking issues.
 
 ## Next Steps
 
-1. Continue running generation/install via fresh Nu process when debugging drift:
-   - `nu -c 'source ~/projects/mcp/generate-mcp.nu; main'`
-   - `nu -c 'source ~/projects/mcp/mcp-install.nu; main'`
-2. Keep discovery structure minimal and driven by `[discovery]` in `mcp.toml`.
-3. If agent behavior still over-requests, tune only `discovery.clientHints` (not service-level hint clutter).
+1. Keep using `mcp.toml` as source of truth for MCP service definitions.
+2. If service entries are removed/renamed again, run `nu mcp-install.nu` and verify `generated/launchd` + `~/Library/LaunchAgents` match.
+3. Continue using fresh Nu processes for troubleshooting to avoid stale in-memory definitions.
 
 ## Recently Changed
 
-- Added generated discovery manifest output: `~/projects/mcp/generated/discovery.json`.
-- Added Caddy root route generation so `GET http://localhost:8765` serves `discovery.json`.
-- Added `[discovery]`, `[discovery.protocol]`, and `[discovery.clientHints]` metadata in `mcp.toml` and wired generator to emit it.
-- Removed service-level discovery clutter (`intentKeywords`, `examples`, `preferredForIntents`, `defaultTool`, `knownTools`) from both `mcp.toml` and generated output.
-- Simplified generator to treat `clientHints` as source-of-truth from `mcp.toml` (no duplicated hardcoded structure).
-- Hardened `mcp-install.nu` to execute `generate-mcp.nu` from disk in a fresh Nu process each run.
+- Renamed `mcp.github` to `mcp.github-personal` and added `mcp.github-opensockets`.
+- Added separate env commands for GitHub MCP startup with distinct 1Password token refs (`Personal` and `Opensockets`).
+- Updated proxy/discovery endpoints to `/github-personal/mcp` and `/github-opensockets/mcp`.
+- Fixed `generate-mcp.nu` to remove stale managed `dev.*.plist` files in `generated/launchd` before regeneration.
+- Verified `mcp-install.nu` now removes legacy `dev.mcp.github.plist` end-to-end.

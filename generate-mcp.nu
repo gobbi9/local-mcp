@@ -3,7 +3,18 @@ export def main [] {
     let generated = $"($root)/generated"
 
     mkdir $generated
-    mkdir $"($generated)/launchd"
+    let launchd_generated = $"($generated)/launchd"
+    mkdir $launchd_generated
+
+    # Clean stale managed launchd artifacts before regenerating
+    let managed_plist_prefix = "dev."
+    (ls $launchd_generated
+        | where type == file
+        | where { |it|
+            let basename = ($it.name | path basename)
+            ($basename | str starts-with $managed_plist_prefix) and ($basename | str ends-with ".plist")
+        }
+    ) | each { |it| rm -f $it.name }
 
     let cfg = (try { openn $"($root)/mcp.toml" } catch { open $"($root)/mcp.toml" })
 

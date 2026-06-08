@@ -165,3 +165,27 @@ Reason:
 Consequences:
 - Install runs are deterministic across long-lived shell sessions.
 - Troubleshooting guidance now favors explicit fresh-process invocation when drift is suspected.
+
+### 2026-06-08
+
+Decision:
+- Split GitHub MCP service into two explicit services in `mcp.toml`: `mcp.github-personal` and `mcp.github-opensockets`, each with its own 1Password token reference and endpoint.
+
+Reason:
+- Support separate account/org contexts without token swapping and keep endpoint intent explicit.
+
+Consequences:
+- New endpoints are `/github-personal/mcp` and `/github-opensockets/mcp`.
+- Generated launchd services are `dev.mcp.github-personal` and `dev.mcp.github-opensockets`.
+
+### 2026-06-08
+
+Decision:
+- In `generate-mcp.nu`, clear stale managed `dev.*.plist` files from `generated/launchd` before generating new plist artifacts.
+
+Reason:
+- `mcp-install.nu` stale cleanup compares LaunchAgents against files present in `generated/launchd`; stale generated files prevented legacy services from being recognized as stale.
+
+Consequences:
+- Removed/renamed MCP services no longer persist due to leftover generated plist files.
+- `mcp-install.nu` stale removal now works end-to-end as intended.
