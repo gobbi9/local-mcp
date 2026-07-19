@@ -1,3 +1,11 @@
+# Generate local MCP runtime configuration from `mcp.toml`.
+#
+# Creates the generated Caddy, launchd, and discovery artifacts, replaces only managed
+# `dev.*.plist` files under `generated/launchd`, and writes the derived mise configuration
+# to `~/.config/mise/config.mcp.toml`. Generated files are intentionally overwritten.
+#
+# Examples:
+#   mcp generate
 export def main [] {
     let root = $"($env.HOME)/projects/mcp"
     let generated = $"($root)/generated"

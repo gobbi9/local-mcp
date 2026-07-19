@@ -79,7 +79,7 @@ This file is intentionally human-editable and acts as the single source of truth
 
 ## `generate-mcp.nu`
 
-This Nushell script generates all derived infrastructure files from `mcp.toml`.
+This Nushell script backs the `mcp generate` command and generates all derived infrastructure files from `mcp.toml`.
 
 It also applies the transport decision logic above, including the "both omitted" direct mode.
 
@@ -199,45 +199,28 @@ This aligns with Supergateway behavior (stdio→HTTP logs on stdout, HTTP→stdi
 
 ---
 
-# Nushell Helper Function
+# Nushell Commands
 
-The helper function is defined in:
+`mcp.nu` provides a namespaced interface without duplicating the command implementations in `generate-mcp.nu` and `mcp-install.nu`.
 
-```text
-~/projects/mcp/mcp-install.nu
+Add the following to your Nushell configuration:
+
+```nu
+use ~/projects/mcp/mcp.nu *
 ```
 
-Add the following to:
+Available commands:
 
-```text
-~/.config/nushell/config.nu
-```
+- `mcp generate` generates the derived mise configuration, Caddyfile, discovery manifest, and managed launchd plists from `mcp.toml`.
+- `mcp install` first runs `mcp generate` in a fresh Nu process, then replaces managed LaunchAgents and reloads them.
 
-```text
-# https://www.nushell.sh/book/configuration.html#macos-keeping-usr-bin-open-as-open
-alias openn = open
-alias open = ^open
-
-# import mcp-install function
-use ~/projects/mcp/generate-mcp.nu
-use ~/projects/mcp/mcp-install.nu
-```
-
-This function automates:
-
-- generating infrastructure files
-- removing stale managed LaunchAgents (`dev.*.plist`) that are no longer generated
-- copying plist files
-- reloading launchd services
-
-The function acts similarly to a lightweight local infrastructure deployment command.
-
-Stale-cleanup safety rule: only `dev.*.plist` entries are treated as managed by this repository, so unrelated LaunchAgents are not deleted.
+`mcp install` removes only stale `dev.*.plist` entries, so unrelated LaunchAgents are not deleted. It prints installed services, log-tail commands, and HTTP endpoints after reloading.
 
 Typical usage:
 
-```text
-mcp-install
+```nu
+mcp generate
+mcp install
 ```
 
 ---

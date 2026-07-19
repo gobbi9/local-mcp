@@ -1,4 +1,11 @@
-# Initialize MCP services
+# Generate and install the local MCP LaunchAgents.
+#
+# Runs the generator in a fresh Nushell process, removes only stale managed `dev.*.plist`
+# LaunchAgents, copies the current generated plists to `~/Library/LaunchAgents`, and reloads
+# them with launchd. It prints the installed services, their log commands, and HTTP endpoints.
+#
+# Examples:
+#   mcp install
 export def main [] {
     let home = $env.HOME
 

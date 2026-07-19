@@ -7,6 +7,7 @@
 - Nushell automation generates and installs local runtime infrastructure:
   - `generate-mcp.nu` builds derived configs.
   - `mcp-install.nu` installs/reloads generated LaunchAgents.
+  - `mcp.nu` provides the public `mcp generate` and `mcp install` Nushell commands while keeping their implementations in the two scripts above.
 
 ## Architecture
 
